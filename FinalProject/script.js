@@ -1,7 +1,7 @@
 //This will be for the mobile menu
 const burgerIcon = document.querySelector("#burger");
 const navbarMenu = document.querySelector("#mylist");
-const endpoint = 'https://api.umd.io/v0/courses';
+const endpoint = 'https://api.umd.io/v0/courses/list';
 
 const classes = [];
 
@@ -39,9 +39,6 @@ L.tileLayer(
 const form = document.querySelector(".courses_form");
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
- // var courses = document.getElementById('dept')
- // var semester = document.getElementById('sm')
- // var credits = document.getElementById('cd')
   const form = $(event.target).serializeArray(); // here we're using jQuery to serialize the form
   console.log(event.target);
   console.log("Submitted Form", form);
@@ -52,4 +49,18 @@ form.addEventListener('submit', async (event) => {
     },
     body: JSON.stringify(form),
   });
+  console.log(data);
+  const response = await data.json()
+  console.log(response)
+  displayData(response)
 });
+
+const displayData = data => { 
+const ul = document.querySelector("ul.info")
+ul.innerHTML = ""
+const html = data.map(course => `<li><h2>${course.course_id}</h2>
+<h4>credits: ${course.credits}</h4>
+<li><h3>${course.semester}</h3>
+<p>${course.description ? course.description : ""}</p> </li>`).join("");
+ul.insertAdjacentHTML("afterbegin",html)
+}
